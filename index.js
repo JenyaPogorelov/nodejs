@@ -85,7 +85,7 @@ let timeDiff = (timeNow, timeEnd) => {
 }
 
 if (!time.match(dateReg)) {
-    console.log("Неверный формат даты, Верный формат:", colors.red("секунда-минута-час-день-месяц-год"));
+    console.log("Неверный формат даты, Верный формат:", colors.red("год-месяц-день-час-минута-секунда"));
 } else {
     let timeSplitArr = time.split('-');
     let timeEnd  = new Time(timeSplitArr);
