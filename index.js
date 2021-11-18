@@ -30,7 +30,7 @@ if (!(process.argv.length > 2)) {
     console.log('Введите данные')
     return;
 } else {
-    process.argv.forEach(async (element, index) =>  {
+    process.argv.forEach((element, index) =>  {
         if (index > 1) {
             let time = process.argv[index];
 
@@ -38,7 +38,7 @@ if (!(process.argv.length > 2)) {
                 console.log("Неверный формат даты, Верный формат:", colors.red("год-месяц-день-час-минута-секунда"));
             } else {
                 let timeThen = moment(time, 'YYYY M D h mm ss').format('YYYY-M-D hh:mm:ss');
-                let timer = await setInterval(() => {
+                let timer = setInterval(() => {
                     let timeNow = moment().format('YYYY-M-D hh:mm:ss')
                     let diff = moment.preciseDiff(timeThen, timeNow);
 
