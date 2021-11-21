@@ -20,3 +20,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+/files/34.48.240.111_requests.log
+/files/89.123.1.41_requests.log
+/files/accessOriginal.log
+/files/access.log
