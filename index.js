@@ -8,7 +8,6 @@ const inquirer = require('inquirer');
 let executionDir = process.cwd();
 const disk = executionDir.slice(0, 3);
 const isFile = (filename) => fs.lstatSync(filename).isFile();
-// let whatFind;
 
 let fileManager = ((list, whatFind) => {
     console.log('whatFind', whatFind);
@@ -38,9 +37,7 @@ let fileManager = ((list, whatFind) => {
                 executionDir = executionDir + `\\${fileName}`;
                 fileManager(list, whatFind);
             }
-
         }
-
     });
 })
 
