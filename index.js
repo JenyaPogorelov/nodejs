@@ -5,31 +5,10 @@ const path = require('path');
 const readline = require('readline');
 const inquirer = require('inquirer');
 
-// const directoryPath = process.argv[2];
-// const whatFind = process.argv[3];
-
-// const childProcess = require('child_process');
-// const {log} = require("yarn/lib/cli");
-// function getLocalDiskNames() {
-//     const buffer = childProcess.execSync('wmic logicaldisk get Caption  /format:list').toString();
-//     const lines = buffer.split('\r\r\n');
-//     const disks = [];
-//
-//     for (const line of lines) {
-//         if(!line) {
-//             continue;
-//         }
-//
-//         const lineData = line.split('=');
-//         disks.push(lineData[1]);
-//     }
-//
-//     return disks;
-// }
-
 let executionDir = process.cwd();
 const disk = executionDir.slice(0, 3);
 const isFile = (filename) => fs.lstatSync(filename).isFile();
+// let whatFind;
 
 let fileManager = ((list, whatFind) => {
     console.log('whatFind', whatFind);
@@ -43,23 +22,21 @@ let fileManager = ((list, whatFind) => {
     ]).then(({fileName}) => {
         if (isFile(executionDir + `\\${fileName}`)) {
             const fullFilePath = path.resolve(executionDir, fileName);
-            // const data = fs.readFileSync(fullFilePath, 'utf-8');
-            // console.log(data);
             const lineReader = readline.createInterface({
                 input: fs.createReadStream(fullFilePath)
             });
             lineReader.on("line", (input) => {
-                if (input.lastIndexOf(whatFind) !== -1) console.log(input);
+                if (input.toString().lastIndexOf(whatFind.toString()) !== -1) console.log(input);
             })
         } else {
             if (fileName === '..') {
                 executionDir = disk + executionDir.slice(3, executionDir.lastIndexOf('\\'));
                 list = fs.readdirSync(executionDir);
-                fileManager(list);
+                fileManager(list, whatFind);
             } else {
                 list = fs.readdirSync(executionDir + `\\${fileName}`);
                 executionDir = executionDir + `\\${fileName}`;
-                fileManager(list);
+                fileManager(list, whatFind);
             }
 
         }
