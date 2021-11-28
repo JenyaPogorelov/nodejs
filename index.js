@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const inquirer = require('inquirer');
+// const os = require ('os');
+//
+// console.log('OS', os.platform ())
 
 let executionDir = process.cwd();
 const isFile = (filename) => fs.lstatSync(filename).isFile();
