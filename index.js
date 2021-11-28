@@ -6,11 +6,12 @@ const readline = require('readline');
 const inquirer = require('inquirer');
 
 let executionDir = process.cwd();
-const disk = executionDir.slice(0, 3);
 const isFile = (filename) => fs.lstatSync(filename).isFile();
+let pathSeparator = '\\';
+let disk = '';
 
 let fileManager = ((list, whatFind) => {
-    console.log('whatFind', whatFind);
+    console.log(executionDir);
     inquirer.prompt([
         {
             name: 'fileName',
@@ -19,7 +20,7 @@ let fileManager = ((list, whatFind) => {
             choices: ['..', ...list],
         },
     ]).then(({fileName}) => {
-        if (isFile(executionDir + `\\${fileName}`)) {
+        if (isFile(path.resolve(executionDir, fileName))) {
             const fullFilePath = path.resolve(executionDir, fileName);
             const lineReader = readline.createInterface({
                 input: fs.createReadStream(fullFilePath)
@@ -29,12 +30,12 @@ let fileManager = ((list, whatFind) => {
             })
         } else {
             if (fileName === '..') {
-                executionDir = disk + executionDir.slice(3, executionDir.lastIndexOf('\\'));
+                executionDir = disk + executionDir.slice(3, executionDir.lastIndexOf(pathSeparator));
                 list = fs.readdirSync(executionDir);
                 fileManager(list, whatFind);
             } else {
-                list = fs.readdirSync(executionDir + `\\${fileName}`);
-                executionDir = executionDir + `\\${fileName}`;
+                list = fs.readdirSync(path.resolve(executionDir, fileName));
+                executionDir = path.resolve(executionDir, fileName);
                 fileManager(list, whatFind);
             }
         }
@@ -45,7 +46,7 @@ inquirer.prompt([
     {
         name: 'directoryPath',
         type: 'input', //input, number, confirm, list, checkbox, password
-        message: 'Select Dir (Диск:\\полный путь до файла): ',
+        message: 'Select Dir ',
     },
     {
         name: 'whatFind',
@@ -53,7 +54,10 @@ inquirer.prompt([
         message: 'what find in file: ',
     },
 ]).then(({directoryPath, whatFind}) => {
-    if (directoryPath) executionDir = directoryPath
+    if (directoryPath) executionDir = directoryPath;
+    if (executionDir.indexOf('\\') === -1) pathSeparator = '/';
+    if (executionDir.indexOf(`${executionDir.slice(0, 1)}:\\`) !== -1) disk = executionDir.slice(0, 3);
+    else disk = '/';
     let list = fs.readdirSync(executionDir);
     fileManager(list, whatFind);
 })
