@@ -26,3 +26,5 @@ yarn-error.log*
 /files/
 /yarn.lock
 /yarn — копия.lock
+/favicon.ico
+/yarn—копия.lock
