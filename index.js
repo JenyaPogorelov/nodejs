@@ -35,7 +35,7 @@ const http = require('http');
                 response.writeHead(200, {
                     'Content-Type': 'text/html; charset=utf-8',
                 })
-                return response.end(HTML);
+                return response.end(HTML, 'utf-8');
             }
         });
 
