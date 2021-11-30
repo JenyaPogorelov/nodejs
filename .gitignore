@@ -20,3 +20,11 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+/index — копия.js
+/lessons 4.zip
+/files/
+/yarn.lock
+/yarn — копия.lock
+/favicon.ico
+/yarn—копия.lock
