@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket</title>
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"
+            integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="mainWindow" style="width: 100%; display: flex; column-gap: 20px; justify-content: space-between">
+    <div id="chat">
+        <input id="input" type="text" autofocus>
+        <button id="buttonSend">Send</button>
+        <button id="buttonClose">Disconnect</button>
+        <button id="buttonConnect">Connect</button>
+        <div id="messages"></div>
+    </div>
+    <div id="chatTerminal" style="background-color: lightgray; width: 350px">Test</div>
+</div>
+
+
+<script>
+    // const socket = io('localhost:5555');//100.70.208.136
+    const socket = io('100.70.208.136:5555');//100.70.208.136
+    const messageBlock = document.querySelector('#messages');
+    const sendButton = document.querySelector('#buttonSend');
+    const closeButton = document.querySelector('#buttonClose');
+    const connectButton = document.querySelector('#buttonConnect');
+    const inputMessage = document.querySelector('#input');
+    const serverTerminal = document.querySelector('#chatTerminal');
+
+    sendButton.addEventListener('click', () => {
+        const data = {
+            message: inputMessage.value,
+        };
+
+        socket.emit('client-msg', data);
+        inputMessage.value = '';
+    });
+    closeButton.addEventListener('click', () => {
+        socket.disconnect();
+        console.log('Disconnected')
+    });
+    connectButton.addEventListener('click', () => {
+        console.log('Connected');
+        socket.connect();
+        socket.secureConnectionStart
+    })
+
+
+    socket.on('connect', () => {
+        console.log('Connected!')
+        console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+
+
+    const printTerminal = (id, status) => {
+        serverTerminal.insertAdjacentHTML('afterbegin', `<div>${id}: ${status}</div>`);
+    }
+
+    socket.on('server-msg', data => {
+        // console.log(data)
+        messageBlock.insertAdjacentHTML('afterbegin', `<div>${data.id}: ${data.message}</div>`);
+    });
+    socket.on('server-disconnectedID', data => {
+        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data.id}: disconnected}</div>`);
+        printTerminal(data.id, 'disconnected');
+    });
+    socket.on('server-connectedID', data => {
+        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data}: connected}</div>`);
+        printTerminal(data, 'connected');
+    });
+    socket.on('server-reconnectedID', data => {
+        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data.id}: reconnected}</div>`);
+        printTerminal(data, 'reconnected');
+    });
+</script>
+</body>
+</html>
