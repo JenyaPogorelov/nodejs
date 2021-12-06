@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FileCommander</title>
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"
+            integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="users">0</div>
+<ul>
+    ##links
+</ul>
+<script>
+
+    const socket = io('localhost:5555');
+    const users = document.querySelector('#users');
+
+    socket.on('server-connected', data => {
+        console.log(data, 'connected');
+        users.innerHTML = data;
+    });
+    socket.on('server-disconnected', data => {
+        console.log(data, 'disconnected');
+        users.innerHTML = data;
+    });
+
+</script>
+</body>
+
+</html>
