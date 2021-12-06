@@ -17,13 +17,20 @@
         <button id="buttonConnect">Connect</button>
         <div id="messages"></div>
     </div>
-    <div id="chatTerminal" style="background-color: lightgray; width: 350px">Test</div>
+    <div id="chatTerminal" style="background-color: lightgray; width: 350px">Terminal</div>
 </div>
 
 
 <script>
+    // console.log(prompt('Введите имя'));
+    // prompt('Введите имя')
     // const socket = io('localhost:5555');//100.70.208.136
-    const socket = io('100.70.208.136:5555');//100.70.208.136
+    const socket = io('localhost:5555', {
+        auth: {
+            token: prompt('Введите имя'),
+        }
+    });//100.70.208.136
+    // socket.auth.token = "ShadowD";
     const messageBlock = document.querySelector('#messages');
     const sendButton = document.querySelector('#buttonSend');
     const closeButton = document.querySelector('#buttonClose');
@@ -55,9 +62,14 @@
         console.log(socket.id); // x8WIv7-mJelg7on_ALbx
     });
 
+    // socket.on('reconnect', () => {
+    //     console.log('you have been reconnected');
+    //     // where username is a global variable for the client
+    //     socket.emit('user-reconnected', "username");
+    // });
 
     const printTerminal = (id, status) => {
-        serverTerminal.insertAdjacentHTML('afterbegin', `<div>${id}: ${status}</div>`);
+        serverTerminal.insertAdjacentHTML('beforeend', `<div>${id}: ${status}</div>`);
     }
 
     socket.on('server-msg', data => {
@@ -65,15 +77,12 @@
         messageBlock.insertAdjacentHTML('afterbegin', `<div>${data.id}: ${data.message}</div>`);
     });
     socket.on('server-disconnectedID', data => {
-        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data.id}: disconnected}</div>`);
         printTerminal(data.id, 'disconnected');
     });
     socket.on('server-connectedID', data => {
-        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data}: connected}</div>`);
         printTerminal(data, 'connected');
     });
     socket.on('server-reconnectedID', data => {
-        // serverTerminal.insertAdjacentHTML('afterbegin', `<div>${data.id}: reconnected}</div>`);
         printTerminal(data, 'reconnected');
     });
 </script>
